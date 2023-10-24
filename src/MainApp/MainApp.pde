@@ -12,13 +12,14 @@ FSM mae; // Finite Sate Machine
 int indice_forme;
 PImage sketch_icon;
 
+// Variables de Fusion
 ArrayList<Commande> prevCmds;
 Commande currentCmd;
 
 
 
 void setup() {
-  size(800,600);
+  size(1000,800);
   surface.setResizable(true);
   surface.setTitle("Palette multimodale");
   surface.setLocation(20,20);
@@ -29,6 +30,11 @@ void setup() {
   noStroke();
   mae = FSM.INITIAL;
   indice_forme = -1;
+  
+  // Machine de fusion
+  prevCmds = new ArrayList();
+  
+  
 }
 
 void draw() {
