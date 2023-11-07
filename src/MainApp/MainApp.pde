@@ -6,12 +6,14 @@
  */
  
 import java.awt.Point;
+import fr.dgac.ivy.*;
 
 ArrayList<Forme> formes; // liste de formes stockées
 FSM mae; // Finite Sate Machine
 int indice_forme;
 PImage sketch_icon;
 
+Ivy bus;
 // Variables de Fusion
 ArrayList<Commande> prevCmds;
 Commande currentCmd;
@@ -33,7 +35,6 @@ void setup() {
   
   // Machine de fusion
   prevCmds = new ArrayList();
-  
   
 }
 
