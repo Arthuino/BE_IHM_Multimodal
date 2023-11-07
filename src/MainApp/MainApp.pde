@@ -13,10 +13,13 @@ FSM mae; // Finite Sate Machine
 int indice_forme;
 PImage sketch_icon;
 
-Ivy bus;
+
 // Variables de Fusion
 ArrayList<Commande> prevCmds;
-Commande currentCmd;
+
+// Bus Ivy
+Ivy bus;
+String busName = "sra_tts_bridge";
 
 
 
@@ -33,8 +36,51 @@ void setup() {
   mae = FSM.INITIAL;
   indice_forme = -1;
   
-  // Machine de fusion
-  prevCmds = new ArrayList();
+   // Machine de fusion
+   prevCmds = new ArrayList();
+  
+  // Bus Ivy
+  try
+  {
+    bus = new Ivy(busName, " sra_tts_bridge is ready", null);
+    bus.start("127.255.255.255:2010");
+    
+    //SPEECH - ACTION - COLOR
+    bus.bindMsg("^sra5 Parsed=(.*) Confidence=(.*) NP=.*", new IvyMessageListener()
+    {
+      public void receive(IvyClient client,String[] args)
+      {
+        // if Action
+        // if Color
+        
+      }        
+    });
+
+
+    // CAMERA/KEYBOARD - FORME
+    bus.bindMsg("^sra5 Parsed=(.*) Confidence=(.*) NP=.*", new IvyMessageListener()
+    {
+      public void receive(IvyClient client,String[] args)
+      {
+        
+      }        
+    });
+
+
+    // EYETRACKING/MOUSE - LOCALISATION
+    bus.bindMsg("^sra5 Parsed=(.*) Confidence=(.*) NP=.*", new IvyMessageListener()
+    {
+      public void receive(IvyClient client,String[] args)
+      {
+       
+      }        
+    });
+  }
+  catch (IvyException ie)
+  {
+  }
+
+  
   
 }
 
@@ -63,6 +109,27 @@ void draw() {
     default:
       break;
   }  
+}
+
+void newCmdInput(ArrayList<Commande> cmds,Object input){
+  // on vérifie que l'input est bien un objet de type Action, Forme, Localisation ou Color
+  if (!(input instanceof Action || input instanceof Forme || input instanceof Localisation || input instanceof Color)) {
+    println("newCmdInput : input non reconnu");
+  }
+  
+
+  // si la liste n'est pas vide
+  if (cmds.size()>0) {
+    // on parcourt toute les commandes en partant de la fin
+    int i=cmds.size()-1;
+    while (i>=0 && !cmds(i).getTypeOfNullInputs().contains(input.getClass().getSimpleName())) {
+      
+      i--;
+    }
+  }
+
+    
+
 }
 
 // fonction d'affichage des formes m
