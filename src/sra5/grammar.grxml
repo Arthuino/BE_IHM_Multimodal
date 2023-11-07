@@ -9,30 +9,85 @@
           xsi:schemaLocation="http://www.w3.org/2001/06/grammar
                               grammar.xsd"
           xml:lang="fr-FR" root="answer" tag-format="semantics/1.0">
-          
+
+  <!-- grammar starts here -->
+  
+  <!-- root rule-->
    <rule id="answer" scope="public"> 
+    <item repeat="0-1">s'il te plaï¿½t</item>
+    
+    <tag>out.action="";</tag>
+    <tag>out.forme="";</tag>
+    <tag>out.couleur="";</tag>
+
     <ruleref special="GARBAGE" /> 
     <one-of>
       <item><ruleref uri="#yes"/>
-          <tag>out="action=YES";</tag></item>
+        <tag>out="action=confirm";</tag>
+      </item>
       <item><ruleref uri="#no"/>
-      <tag>out="action=NO";</tag></item>
+        <tag>out="action=infirme";</tag>
+      </item>
+      <item><ruleref uri="#Action"/>
+        <tag>out.action=rules;</tag>
+      </item>
+      <item><ruleref uri="#Forme"/>
+        <tag>out.forme=rules</tag>
+      </item>
+      <item><ruleref uri="#Couleur"/>
+        <tag>out.couleur=rules;</tag>
+      </item>
     </one-of>
     <ruleref special="GARBAGE" />
+    <item repeat="0-1">s'il te plaï¿½t</item>
   </rule>
-       
+
+<!-- Definition de chaque rÃ¨gle-->
+
+<!-- Action -->
+  <rule id="Action">
+    <one-of>
+      <item>create</item> <tag>out="action=create";</tag>
+      <item>move</item> <tag>out="action=move";</tag>
+    </one-of> 
+  </rule> 
+
+<!-- Forme -->
+  <rule id="Forme">
+    <one-of>
+      <item>rectangle</item> <tag>out="forme=rectangle";</tag>
+      <item>triangle</item> <tag>out="forme=triangle";</tag>
+      <item>cercle</item> <tag>out="forme=cercle";</tag>
+      <item>losange</item> <tag>out="forme=losange";</tag>
+    </one-of>
+  </rule>
+
+<!-- Couleur -->
+  <rule id="Couleur">
+    <one-of>
+      <item>rouge</item> <tag>out="couleur=rouge";</tag>
+      <item>bleu</item> <tag>out="couleur=bleu";</tag>
+      <item>vert</item> <tag>out="couleur=vert";</tag>
+      <item>violet</item> <tag>out="couleur=violet";</tag>
+    </one-of>
+  </rule>
+
+<!-- oui -->
    <rule id="yes">
     <one-of>
       <item>affirmatif</item>
-      <item>tout à fait</item>
+      <item>tout ï¿½ fait</item>
       <item>oui</item>
     </one-of> 
   </rule> 
+
+<!-- non -->
   <rule id="no">
     <one-of>
-      <item>négatif</item>
+      <item>nï¿½gatif</item>
       <item>non</item>
       <item>pas question</item>
     </one-of>
   </rule>
+
 </grammar>
