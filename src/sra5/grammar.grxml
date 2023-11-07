@@ -15,7 +15,7 @@
   <!-- root rule-->
    <rule id="answer" scope="public"> 
     <item repeat="0-1">s'il te pla�t</item>
-    
+
     <tag>out.action="";</tag>
     <tag>out.forme="";</tag>
     <tag>out.couleur="";</tag>
@@ -47,8 +47,9 @@
 <!-- Action -->
   <rule id="Action">
     <one-of>
-      <item>create</item> <tag>out="action=create";</tag>
-      <item>move</item> <tag>out="action=move";</tag>
+      <item>creer</item> <tag>out="action=creer";</tag>
+      <item>bouge</item> <tag>out="action=bouge";</tag>
+      <item>met</item> <tag>out="action=bouge";</tag>
     </one-of> 
   </rule> 
 
