@@ -77,4 +77,5 @@ public class Losange extends Forme {
     double aire = s*(s-distance(I,J))*(s-distance(J,K))*(s-distance(K,I));
     return(sqrt((float) aire));
   }
+
 }
