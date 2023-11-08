@@ -46,72 +46,32 @@ void setup() {
     bus.start("127.255.255.255:2010");
     
     //SPEECH - ACTION - COLOR
-    bus.bindMsg("^SPEECH_INPUT type=(.*) input=(.*)", new IvyMessageListener()
+    bus.bindMsg("^sra5 Parsed=(.*) Confidence=(.*) NP=.*", new IvyMessageListener()
     {
       public void receive(IvyClient client,String[] args)
       {
-        
         // if Action
-        if (args[0].equals("ACTION")) {
-          Action act;
-          if(args[1].equals("move")) {
-            act = Action.MOVE;
-            newCmdInput(prevCmds, act);
-          } else if (args[1].equals("create")) {
-            act = Action.CREATE;
-            newCmdInput(prevCmds, act);
-          }
-
-        }
-
-        // if color
-        else if (args[0].equals("COLOR")) {
-          if(args[1].equals("red")) {
-            newCmdInput(prevCmds, color(255,0,0));
-          }
-          if(args[1].equals("green")) {
-            newCmdInput(prevCmds, color(0,255,0));
-          }
-          if(args[1].equals("blue")) {
-            newCmdInput(prevCmds, color(0,0,255));
-          }
-          if(args[1].equals("yellow")) {
-            newCmdInput(prevCmds, color(255,255,0));
-          }
-          if(args[1].equals("orange")) {
-            newCmdInput(prevCmds, color(255,165,0));
-          }
-          if(args[1].equals("purple")) {
-            newCmdInput(prevCmds, color(128,0,128));
-          }
-          if(args[1].equals("dark")) {
-            newCmdInput(prevCmds, color(0,0,0));
-          }
-        }
-
+        // if Color
+        
       }        
     });
 
 
     // CAMERA/KEYBOARD - FORME
-    bus.bindMsg("^FORME_INPUT type=(.*)", new IvyMessageListener()
+    bus.bindMsg("^sra5 Parsed=(.*) Confidence=(.*) NP=.*", new IvyMessageListener()
     {
       public void receive(IvyClient client,String[] args)
       {
-        // Forme
-        //newCmdInput(prevCmds, new Forme(args[0]));
         
-      }    
+      }        
     });
 
 
     // EYETRACKING/MOUSE - LOCALISATION
-    bus.bindMsg("^LOC_INPUT x=(.*) y=(.*)", new IvyMessageListener()
+    bus.bindMsg("^sra5 Parsed=(.*) Confidence=(.*) NP=.*", new IvyMessageListener()
     {
       public void receive(IvyClient client,String[] args)
       {
-        // Localisation
-        //newCmdInput(prevCmds, new Localisation(args[0]));
        
       }        
     });
@@ -126,7 +86,7 @@ void setup() {
 
 void draw() {
   background(0);
-  // println("MAE : " + mae + " indice forme active ; " + indice_forme);
+  println("MAE : " + mae + " indice forme active ; " + indice_forme);
   switch (mae) {
     case INITIAL:  // Etat INITIAL
       background(255);
@@ -152,31 +112,24 @@ void draw() {
 }
 
 void newCmdInput(ArrayList<Commande> cmds,Object input){
-  boolean isInputSet = false;
-  Commande cmd = new Commande();
   // on vérifie que l'input est bien un objet de type Action, Forme, Localisation ou Color
-  if (cmd.isObjectInput(input)==false) {
+  if (!(input instanceof Action || input instanceof Forme || input instanceof Localisation || input instanceof color)) {
     println("newCmdInput : input non reconnu");
   }
   
+
   // si la liste n'est pas vide
   if (cmds.size()>0) {
     // on parcourt toute les commandes en partant de la fin
     int i=cmds.size()-1;
-    while (i>=0 && isInputSet==false) {
-      if (cmds.get(i).isInputAvailable(input)==true) {
-        cmds.get(i).addInput(input);
-        isInputSet=true;
-      }
+    while (i>=0 && !cmds(i).getTypeOfNullInputs().contains(input.getClass().getSimpleName())) {
+      
       i--;
     }
   }
+ 
 
-  if(isInputSet==false) {
-    Commande c = new Commande();
-    c.addInput(input);
-    cmds.add(c);
-  }
+    
 
 }
 
@@ -255,30 +208,5 @@ void keyPressed() {
     case 'm' : // move
       mae=FSM.DEPLACER_FORMES_SELECTION;
       break;
-  }
-}
-// Create method  
-void createForme(Localisation loc, Color col){
-  Forme f= new Rectangle(loc.getPoint());
-  f.setColor(col);
-  formes.add(f);
-}
-
-
-// Fusion method
-void fusion(ArrayList<Commande> cmds) {
-  // on parcourt toute les commandes en partant de la fin
-  Commande cmd = new Commande();
-  int i=cmds.size()-1;
-  while (i>=0) {
-    if (cmds.get(i).isCompleteEnough()==true) {
-      cmd = cmds.get(i);
-      println("fusion : commande complète --> "+cmd.toString());
-      if(cmd.act == Action.CREATE) {
-        Point p = new Point(mouseX,mouseY);
-        createForme(p, cmd.col);
-      }
-    }
-    i--;
   }
 }

@@ -37,4 +37,6 @@ public class Rectangle extends Forme {
   protected double aire(){
     return(this.longueur*this.longueur);
   }
+
+
 }

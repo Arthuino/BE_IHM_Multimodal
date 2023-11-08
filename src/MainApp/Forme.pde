@@ -41,4 +41,8 @@ abstract class Forme {
  
  protected abstract double perimetre();
  protected abstract double aire();
+
+ public String toString() {
+   return(this.getClass().getName());
+ }
 }

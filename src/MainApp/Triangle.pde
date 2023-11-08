@@ -69,4 +69,5 @@ public class Triangle extends Forme {
     double aire = s*(s-distance(B,C))*(s-distance(A,C))*(s-distance(A,B));
     return(sqrt((float) aire));
   }
+
 }
