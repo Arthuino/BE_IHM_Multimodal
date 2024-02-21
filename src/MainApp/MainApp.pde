@@ -1,12 +1,12 @@
 /*
- * Palette Graphique - prélude au projet multimodal 3A SRI
- * 4 objets gérés : cercle, rectangle(carré), losange et triangle
- * (c) 05/11/2019
- * Dernière révision : 28/04/2020
+ * Basé sur la Palette graphique
+ * L'application est un "put that here" multimodal
+ * Elle permet de créer des formes géométriques et de les déplacer
  */
  
 import java.awt.Point;
 import fr.dgac.ivy.*;
+
 
 ArrayList<Forme> formes; // liste de formes stockées
 FSM mae; // Finite Sate Machine
@@ -50,7 +50,7 @@ void setup() {
     {
       public void receive(IvyClient client,String[] args)
       {
-        
+        println("SPEECH_INPUT : type="+args[0]+" input="+args[1]);
         // if Action
         if (args[0].equals("ACTION")) {
           Action act;
@@ -98,8 +98,22 @@ void setup() {
     {
       public void receive(IvyClient client,String[] args)
       {
+        Forme form = null;
+        println("FORME_INPUT : type="+args[0]);
         // Forme
-        //newCmdInput(prevCmds, new Forme(args[0]));
+        if (args[0].equals("cercle")) {
+          form = new Cercle();
+        }
+        else if (args[0].equals("rectangle")) {
+          form = new Rectangle();
+        }
+        else if (args[0].equals("triangle")) {
+          form = new Triangle();
+        }
+        else if (args[0].equals("losange")) {
+          form = new Losange();
+        }
+        newCmdInput(prevCmds, form);
         
       }    
     });
@@ -110,8 +124,10 @@ void setup() {
     {
       public void receive(IvyClient client,String[] args)
       {
+        println("LOC_INPUT : x="+args[0]+" y="+args[1]);
         // Localisation
-        //newCmdInput(prevCmds, new Localisation(args[0]));
+        Localisation loc = new Localisation(int(args[0]), int(args[1]));
+        newCmdInput(prevCmds, loc);
        
       }        
     });
@@ -121,7 +137,7 @@ void setup() {
   }
 
   
-  
+  println("Fusion machine ready");
 }
 
 void draw() {
@@ -151,6 +167,14 @@ void draw() {
   }  
 }
 
+
+/*
+  Fonction de création de commandes
+  Si l'input est déjà présent dans une commande, on crée une nouvelle commande
+  
+  @param cmds : liste de commandes
+  @param input : objet de type Action, Forme, Localisation
+*/
 void newCmdInput(ArrayList<Commande> cmds,Object input){
   boolean isInputSet = false;
   Commande cmd = new Commande();
@@ -258,25 +282,29 @@ void keyPressed() {
   }
 }
 // Create method  
-void createForme(Localisation loc, Color col){
-  Forme f= new Rectangle(loc.getPoint());
-  f.setColor(col);
-  formes.add(f);
+void createForme(Commande cmd){
+  // on met à jour la forme avec les informations de la commande
+  cmd.form.setLocation(cmd.loc.getLoc());
+  cmd.form.setColor(cmd.col);
+  formes.add(cmd.form);
 }
 
 
 // Fusion method
 void fusion(ArrayList<Commande> cmds) {
-  // on parcourt toute les commandes en partant de la fin
+  // on parcourt toute les commandes existantes en partant de la fin
   Commande cmd = new Commande();
   int i=cmds.size()-1;
   while (i>=0) {
+    // on vérifie si la commande contient suffisamment d'informations pour être exécutée
     if (cmds.get(i).isCompleteEnough()==true) {
       cmd = cmds.get(i);
       println("fusion : commande complète --> "+cmd.toString());
+      // Si oui, on execute la commande correspondante
       if(cmd.act == Action.CREATE) {
-        Point p = new Point(mouseX,mouseY);
-        createForme(p, cmd.col);
+        
+
+        createForme(cmd);
       }
     }
     i--;

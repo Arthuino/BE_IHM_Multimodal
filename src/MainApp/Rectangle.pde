@@ -6,6 +6,13 @@ public class Rectangle extends Forme {
   
   int longueur;
   
+  // constructeur vide
+  public Rectangle() {
+    super();
+    this.longueur=60;
+  }
+
+
   public Rectangle(Point p) {
     super(p);
     this.longueur=60;
@@ -27,6 +34,10 @@ public class Rectangle extends Forme {
       return(true);
     else  
       return(false);
+  }
+
+  void setLocation(Point p){
+    this.origin=p;
   }
   
   // Calcul du périmètre du carré

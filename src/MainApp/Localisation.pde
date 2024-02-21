@@ -8,7 +8,7 @@ public class Localisation{
     this.y = y;
   }
 
-  public Point getPoint(){
+  public Point getLoc(){
     return new Point(x, y);
   }
   

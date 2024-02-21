@@ -6,6 +6,12 @@ public class Cercle extends Forme {
   
   int rayon;
   
+   // constructeur vide
+  public Cercle(){
+    super();
+    this.rayon=80;
+  }
+
   public Cercle(Point p) {
     super(p);
     this.rayon=80;
@@ -25,6 +31,10 @@ public class Cercle extends Forme {
      return(false);
   }
   
+  void setLocation(Point p){
+    this.origin=p;
+  }
+
   protected double perimetre() {
     return(2*PI*this.rayon);
   }

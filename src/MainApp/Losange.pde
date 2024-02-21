@@ -4,6 +4,15 @@
  
 public class Losange extends Forme {
   Point A, B,C,D;
+
+   // constructeur vide
+  public Losange() {
+    super();
+    A = new Point();    
+    B = new Point();    
+    C = new Point();  
+    D = new Point();
+  }
   
   public Losange(Point p) {
     super(p);

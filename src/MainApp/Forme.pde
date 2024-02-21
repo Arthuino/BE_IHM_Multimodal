@@ -12,6 +12,10 @@ abstract class Forme {
    this.origin=p;
    this.c = color(127);
  }
+
+ Forme(){
+    this.c = color(127);
+ }
  
  void setColor(color c) {
    this.c=c;
@@ -32,6 +36,8 @@ abstract class Forme {
  }
  
  abstract boolean isClicked(Point p);
+
+ abstract void setLocation(Point p);
  
  // Calcul de la distance entre 2 points
  protected double distance(Point A, Point B) {

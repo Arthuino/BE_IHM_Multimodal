@@ -4,6 +4,16 @@
  
 public class Triangle extends Forme {
   Point A, B,C;
+
+   // constructeur vide
+  public Triangle() {
+    super();
+    A = new Point();    
+    B = new Point();    
+    C = new Point();
+  }
+
+
   public Triangle(Point p) {
     super(p);
     // placement des points

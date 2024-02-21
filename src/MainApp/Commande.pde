@@ -79,6 +79,5 @@ public class Commande {
     public String toString() {
         return "Commande : " + act + " " + form + " " + col + " " + loc;
     }
-        
 
 }
