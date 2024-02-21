@@ -14,6 +14,7 @@ import fr.dgac.ivy.*;
 Ivy bus;
 PFont f;
 String message= "";
+String 
 
 int state;
 public static final int INIT = 0;
@@ -36,20 +37,27 @@ void setup()
     bus = new Ivy("sra_tts_bridge", " sra_tts_bridge is ready", null);
     bus.start("127.255.255.255:2010");
     
+    
     bus.bindMsg("^sra5 Text=(.*) Confidence=.*", new IvyMessageListener()
     {
       public void receive(IvyClient client,String[] args)
       {
         message = "Vous avez dit : " + args[0];
+        println("texte = ",args[0]);
         state = TEXTE;
       }        
     });
     
-    bus.bindMsg("^sra5 Parsed=(.*) Confidence=(.*) NP=.*", new IvyMessageListener()
+    bus.bindMsg("^sra5 Parsed=action=(.*) where=(.*) form=(.*) color=(.*) localisation=(.*) Confidence=(.*) NP=.*", new IvyMessageListener()
     {
       public void receive(IvyClient client,String[] args)
       {
-        message = "Vous avez prononcé les concepts : " + args[0] + " avec un taux de confiance de " + args[1];
+        action = args[0];
+        where = args[1];
+        form = args[2];
+        couleur = args[3];
+        localisation = args[4];
+       
         state = CONCEPT;
       }        
     });
@@ -76,7 +84,7 @@ void draw()
     case INIT:
       message = "Bonjour, veuillez parler s'il vous plaît";
       try {
-          bus.sendMsg("ppilot5 Say=" + message); 
+          bus.sendMsg("init");
       }
       catch (IvyException e) {}
       state = ATTENTE;
@@ -88,7 +96,8 @@ void draw()
       
     case TEXTE :
       try {
-          bus.sendMsg("ppilot5 Say=" + message); 
+          bus.sendMsg("ppilot5 Say=" + message);
+          
       }
       catch (IvyException e) {}
       state = ATTENTE;
@@ -96,7 +105,9 @@ void draw()
       
      case CONCEPT:  
        try {
-          bus.sendMsg("ppilot5 Say=" + message); 
+          bus.sendMsg("SPEECH_INPUT type=ACTION input=" + action); 
+          bus.sendMsg("SPEECH_INPUT type=COLOR input=" + couleur);
+          bus.sendMsg("FORME_INPUT type=FORM input=" + form);
        }
        catch (IvyException e) {}
        state = ATTENTE;
