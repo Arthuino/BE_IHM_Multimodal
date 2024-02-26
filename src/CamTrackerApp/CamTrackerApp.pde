@@ -58,17 +58,21 @@ void draw(){
   // On l'affiche
   
   image(cam, 0, 0);
-  if(greenWeight>1000){
+  
+  // si il y a suffisament de vert dans l'image, on enregistre un nouveau dessin de forme 
+  if(greenWeight>900){
     
     points = (Point[])append(points, center);
     fill(255, 0, 0);
     ellipse(center.X, center.Y, 10, 10);
   }
+  // si il n'y a plus assez de vert dans l'image pour considérer que un dessin est en cours, on enregistre la line sous forme de Unistroke pour la reconnaissance.
   else if(points.length!=0){
     currentStroke = new Unistroke(points);
     points = new Point[0];
   }
   
+  // on affiche la dernière forme enregistré
   if(currentStroke.points.length>0){
     for (int i = 0; i < currentStroke.points.length; i++) {
       ellipse(currentStroke.points[i].X, currentStroke.points[i].Y,5,5);
